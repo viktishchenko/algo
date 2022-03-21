@@ -35,7 +35,12 @@ const peter = people.find((person) => {
 // console.log(peter); // :>> { name: "peter", age: 25, position: "designer" }
 // no match
 const oldPeople = people.find((person) => person.age > 35);
-console.log(oldPeople); // :>>  undefined
+// console.log(oldPeople); // :>>  undefined
 // multiple matches - first match
 const randomPerson = people.find((person) => person.age < 35);
-console.log(randomPerson); // :>> { name: "bob", age: 20, position: "developer" }
+// console.log(randomPerson); // :>> { name: "bob", age: 20, position: "developer" }
+const anna = people.filter((item) => {
+  return item.name === "anna";
+});
+console.log("anna :>> ", anna); // [ {…} ]
+console.log("anna[0].position :>> ", anna[0].position); // :>>  intern
