@@ -1,4 +1,42 @@
-// Unique Values
+/**
+ * Set object - stores a collection of unique
+ * values of any type
+ *
+ * new Set()
+ * add(value)
+ * delete(value)
+ * clear()
+ * has(value)
+ *
+ * ITERATORS
+ * entries(),keys(),values(),forEach()
+ */
+
+const unique = new Set();
+const random = "third";
+unique.add("first");
+unique.add("second");
+unique.add(random);
+unique.add("third");
+unique.add("second");
+
+/* 
+console.log(unique); // Set(3) [ "first", "second", "third" ]
+ */
+
+let results = unique.delete("third"); // :>> true
+// console.log(results); // :>> true
+
+results = unique.delete("five"); // :>> false
+
+let isValue = unique.has(4); // :>> false
+isValue = unique.has("first"); // :>> true
+
+// console.log(unique); // Set [ "first", "second" ]
+
+/**
+ * new Set() - accept iterable objects
+ */
 
 const menu = [
   {
