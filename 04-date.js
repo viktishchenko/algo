@@ -14,12 +14,12 @@
  * @return {date}
  *
  * @example:
- *    'December 17, 1995 03:24:00'    => Date()
- *    'Tue, 26 Jan 2016 13:48:02 GMT' => Date()
- *    'Sun, 17 May 1998 03:00:00 GMT+01' => Date()
+ *    'December 17, 1995 03:24:00'    => new  Date()
+ *    'Tue, 26 Jan 2016 13:48:02 GMT' => new  Date()
+ *    'Sun, 17 May 1998 03:00:00 GMT+01' => new  Date()
  */
-function parseDataFromRfc2822(/* value */) {
-  throw new Error("Not implemented");
+function parseDataFromRfc2822(value) {
+  return new Date(value);
 }
 
 /**
@@ -30,11 +30,11 @@ function parseDataFromRfc2822(/* value */) {
  * @return {date}
  *
  * @example :
- *    '2016-01-19T16:07:37+00:00'    => Date()
- *    '2016-01-19T08:07:37Z' => Date()
+ *    '2016-01-19T16:07:37+00:00'    => new  Date()
+ *    '2016-01-19T08:07:37Z' => new  Date()
  */
-function parseDataFromIso8601(/* value */) {
-  throw new Error("Not implemented");
+function parseDataFromIso8601(value) {
+  return new Date(value);
 }
 
 /**
@@ -45,14 +45,16 @@ function parseDataFromIso8601(/* value */) {
  * @return {bool}
  *
  * @example :
- *    Date(1900,1,1)    => false
- *    Date(2000,1,1)    => true
- *    Date(2001,1,1)    => false
- *    Date(2012,1,1)    => true
- *    Date(2015,1,1)    => false
+ *   new Date(1900,1,1)    => false
+ *   new Date(2000,1,1)    => true
+ *   new Date(2001,1,1)    => false
+ *   new Date(2012,1,1)    => true
+ *   new Date(2015,1,1)    => false
  */
-function isLeapYear(/* date */) {
-  throw new Error("Not implemented");
+function isLeapYear(date) {
+  const year = date.getFullYear();
+  let leaps = year % 4 === 0 && year % 100 === 0 && year % 400 === 0;
+  return leaps ? true : false;
 }
 
 /**
@@ -64,14 +66,55 @@ function isLeapYear(/* date */) {
  * @return {string}
  *
  * @example:
- *    Date(2000,1,1,10,0,0),  Date(2000,1,1,11,0,0)   => "01:00:00.000"
- *    Date(2000,1,1,10,0,0),  Date(2000,1,1,10,30,0)       => "00:30:00.000"
- *    Date(2000,1,1,10,0,0),  Date(2000,1,1,10,0,20)        => "00:00:20.000"
- *    Date(2000,1,1,10,0,0),  Date(2000,1,1,10,0,0,250)     => "00:00:00.250"
- *    Date(2000,1,1,10,0,0),  Date(2000,1,1,15,20,10,453)   => "05:20:10.453"
+ *    new  Date(2000,1,1,10,0,0),  new  Date(2000,1,1,11,0,0)   => "01:00:00.000"
+ *    new  Date(2000,1,1,10,0,0),  new  Date(2000,1,1,10,30,0)       => "00:30:00.000"
+ *    new  Date(2000,1,1,10,0,0),  new  Date(2000,1,1,10,0,20)        => "00:00:20.000"
+ *    new  Date(2000,1,1,10,0,0),  new  Date(2000,1,1,10,0,0,250)     => "00:00:00.250"
+ *    new  Date(2000,1,1,10,0,0),  new  Date(2000,1,1,15,20,10,453)   => "05:20:10.453"
  */
-function timeSpanToString(/* startDate, endDate */) {
-  throw new Error("Not implemented");
+function timeSpanToString(startDate, endDate) {
+  let hours = (endDate.getHours() - startDate.getHours())
+    .toString()
+    .padStart(2, 0);
+  let minutes = (endDate.getMinutes() - startDate.getMinutes())
+    .toString()
+    .padStart(2, 0);
+  let seconds = (endDate.getSeconds() - startDate.getSeconds())
+    .toString()
+    .padStart(2, 0);
+  let milliseconds = (endDate.getMilliseconds() - startDate.getMilliseconds())
+    .toString()
+    .padStart(3, 0);
+
+  return `${hours}:${minutes}:${seconds}.${milliseconds}`;
+  /* 
+  let date = (endDate - startDate) / 3600000;
+  let hours = parseInt(date);
+  let minutes = parseInt((date - hours) * 60);
+  let seconds = parseInt(((date - hours) * 60 - minutes) * 60);
+  let milliseconds = parseInt(
+    (((date - hours) * 60 - minutes) * 60 - seconds) * 1000
+  );
+
+  function addZero(num, idx) {
+    if (num < 10 && idx === 1) {
+      return "0" + num;
+    }
+    if (num < 10 && idx !== 1) {
+      return "00" + num;
+    }
+    if (num > 99 && idx !== 1) {
+      return num;
+    }
+    if (9 < num < 99 && idx !== 1) {
+      return "0" + num;
+    }
+    return num;
+  }
+  return `${addZero(hours, 1)}:${addZero(minutes, 1)}:${addZero(
+    seconds,
+    1
+  )}.${addZero(milliseconds, 2)}`; */
 }
 
 /**
@@ -85,19 +128,11 @@ function timeSpanToString(/* startDate, endDate */) {
  * @return {number}
  *
  * @example:
- *    Date.UTC(2016,2,5, 0, 0) => 0
- *    Date.UTC(2016,3,5, 3, 0) => Math.PI/2
- *    Date.UTC(2016,3,5,18, 0) => Math.PI
- *    Date.UTC(2016,3,5,21, 0) => Math.PI/2
+ *    new  Date.UTC(2016,2,5, 0, 0) => 0
+ *    new  Date.UTC(2016,3,5, 3, 0) => Math.PI/2
+ *    new  Date.UTC(2016,3,5,18, 0) => Math.PI
+ *    new  Date.UTC(2016,3,5,21, 0) => Math.PI/2
  */
 function angleBetweenClockHands(/* date */) {
   throw new Error("Not implemented");
 }
-
-module.exports = {
-  parseDataFromRfc2822,
-  parseDataFromIso8601,
-  isLeapYear,
-  timeSpanToString,
-  angleBetweenClockHands,
-};
